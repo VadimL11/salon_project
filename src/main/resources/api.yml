@@ -1,0 +1,977 @@
+openapi: 3.0.3
+info:
+  title: Beauty Booking API
+  version: 1.0.0
+  description: >
+    API для запису клієнтів до майстрів, керування послугами/розкладом, замовленнями продуктів/напоїв та відгуками.
+servers:
+  - url: http://localhost:8080
+    description: Local Spring Boot
+
+tags:
+  - name: Auth
+  - name: Clients
+  - name: Masters
+  - name: Categories
+  - name: Services
+  - name: Schedules
+  - name: Appointments
+  - name: Products
+  - name: Drinks
+  - name: Orders
+  - name: Reviews
+
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login (returns JWT)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/LoginRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/LoginResponse" }
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /clients:
+    get:
+      tags: [Clients]
+      summary: List clients
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Offset"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ClientsPage" }
+    post:
+      tags: [Clients]
+      summary: Create client
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClientCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Client" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+  /clients/{clientId}:
+    get:
+      tags: [Clients]
+      summary: Get client by id
+      parameters:
+        - $ref: "#/components/parameters/ClientId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Client" }
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    patch:
+      tags: [Clients]
+      summary: Update client
+      parameters:
+        - $ref: "#/components/parameters/ClientId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClientUpdate" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Client" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    delete:
+      tags: [Clients]
+      summary: Delete client
+      parameters:
+        - $ref: "#/components/parameters/ClientId"
+      responses:
+        "204":
+          description: No Content
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /masters:
+    get:
+      tags: [Masters]
+      summary: List masters
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Offset"
+        - in: query
+          name: active
+          schema: { type: boolean }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/MastersPage" }
+    post:
+      tags: [Masters]
+      summary: Create master
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/MasterCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Master" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+  /masters/{masterId}:
+    get:
+      tags: [Masters]
+      summary: Get master by id
+      parameters:
+        - $ref: "#/components/parameters/MasterId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Master" }
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    patch:
+      tags: [Masters]
+      summary: Update master
+      parameters:
+        - $ref: "#/components/parameters/MasterId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/MasterUpdate" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Master" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    delete:
+      tags: [Masters]
+      summary: Delete master
+      parameters:
+        - $ref: "#/components/parameters/MasterId"
+      responses:
+        "204":
+          description: No Content
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /categories:
+    get:
+      tags: [Categories]
+      summary: List categories
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Category" }
+    post:
+      tags: [Categories]
+      summary: Create category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CategoryCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Category" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+  /services:
+    get:
+      tags: [Services]
+      summary: List services
+      parameters:
+        - in: query
+          name: categoryId
+          schema: { type: integer, format: int64 }
+        - in: query
+          name: active
+          schema: { type: boolean }
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Offset"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ServicesPage" }
+    post:
+      tags: [Services]
+      summary: Create service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ServiceCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Service" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+  /services/{serviceId}:
+    patch:
+      tags: [Services]
+      summary: Update service
+      parameters:
+        - $ref: "#/components/parameters/ServiceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ServiceUpdate" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Service" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    delete:
+      tags: [Services]
+      summary: Delete service
+      parameters:
+        - $ref: "#/components/parameters/ServiceId"
+      responses:
+        "204":
+          description: No Content
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /schedules:
+    get:
+      tags: [Schedules]
+      summary: List schedules (time slots)
+      parameters:
+        - in: query
+          name: masterId
+          schema: { type: integer, format: int64 }
+        - in: query
+          name: from
+          schema: { type: string, format: date }
+        - in: query
+          name: to
+          schema: { type: string, format: date }
+        - in: query
+          name: available
+          schema: { type: boolean }
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Offset"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SchedulesPage" }
+    post:
+      tags: [Schedules]
+      summary: Create schedule slot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScheduleCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Schedule" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+  /appointments:
+    get:
+      tags: [Appointments]
+      summary: List appointments
+      parameters:
+        - in: query
+          name: clientId
+          schema: { type: integer, format: int64 }
+        - in: query
+          name: masterId
+          schema: { type: integer, format: int64 }
+        - in: query
+          name: status
+          schema: { $ref: "#/components/schemas/AppointmentStatus" }
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Offset"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AppointmentsPage" }
+    post:
+      tags: [Appointments]
+      summary: Create appointment (book slot)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AppointmentCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Appointment" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "409":
+          description: Conflict (slot already booked)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /appointments/{appointmentId}:
+    get:
+      tags: [Appointments]
+      summary: Get appointment by id
+      parameters:
+        - $ref: "#/components/parameters/AppointmentId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Appointment" }
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    patch:
+      tags: [Appointments]
+      summary: Update appointment (status/price)
+      parameters:
+        - $ref: "#/components/parameters/AppointmentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AppointmentUpdate" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Appointment" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /products:
+    get:
+      tags: [Products]
+      summary: List products
+      parameters:
+        - in: query
+          name: inStock
+          schema: { type: boolean }
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Offset"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProductsPage" }
+    post:
+      tags: [Products]
+      summary: Create product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProductCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Product" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+  /drinks:
+    get:
+      tags: [Drinks]
+      summary: List drinks
+      parameters:
+        - in: query
+          name: available
+          schema: { type: boolean }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Drink" }
+    post:
+      tags: [Drinks]
+      summary: Create drink
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DrinkCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Drink" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+  /appointments/{appointmentId}/orders/products:
+    post:
+      tags: [Orders]
+      summary: Add product order to appointment
+      parameters:
+        - $ref: "#/components/parameters/AppointmentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProductOrderCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProductOrder" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /appointments/{appointmentId}/orders/drinks:
+    post:
+      tags: [Orders]
+      summary: Add drink order to appointment
+      parameters:
+        - $ref: "#/components/parameters/AppointmentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DrinkOrderCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DrinkOrder" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /reviews:
+    post:
+      tags: [Reviews]
+      summary: Create review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ReviewCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Review" }
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    Limit:
+      in: query
+      name: limit
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    Offset:
+      in: query
+      name: offset
+      schema: { type: integer, minimum: 0, default: 0 }
+
+    ClientId:
+      in: path
+      name: clientId
+      required: true
+      schema: { type: integer, format: int64 }
+    MasterId:
+      in: path
+      name: masterId
+      required: true
+      schema: { type: integer, format: int64 }
+    ServiceId:
+      in: path
+      name: serviceId
+      required: true
+      schema: { type: integer, format: int64 }
+    AppointmentId:
+      in: path
+      name: appointmentId
+      required: true
+      schema: { type: integer, format: int64 }
+
+  responses:
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NotFoundError:
+      description: Not found
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      properties:
+        code: { type: string, example: VALIDATION_ERROR }
+        message: { type: string, example: Invalid request }
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field: { type: string, example: email }
+              issue: { type: string, example: must be a valid email }
+      required: [code, message]
+
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 6 }
+      required: [email, password]
+
+    LoginResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        accessToken: { type: string, example: "eyJhbGciOi..." }
+        tokenType: { type: string, example: Bearer }
+        expiresIn: { type: integer, example: 3600 }
+      required: [accessToken, tokenType, expiresIn]
+
+    Client:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        firstName: { type: string }
+        lastName: { type: string }
+        phone: { type: string, nullable: true }
+        email: { type: string, format: email, nullable: true }
+        language: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+      required: [id, firstName, lastName, createdAt]
+
+    ClientCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName: { type: string, minLength: 1 }
+        lastName: { type: string, minLength: 1 }
+        phone: { type: string, nullable: true }
+        email: { type: string, format: email, nullable: true }
+        language: { type: string, nullable: true }
+      required: [firstName, lastName]
+
+    ClientUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName: { type: string }
+        lastName: { type: string }
+        phone: { type: string, nullable: true }
+        email: { type: string, format: email, nullable: true }
+        language: { type: string, nullable: true }
+
+    ClientsPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Client" }
+        limit: { type: integer }
+        offset: { type: integer }
+        total: { type: integer }
+      required: [items, limit, offset, total]
+
+    Master:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        firstName: { type: string }
+        lastName: { type: string }
+        photo: { type: string, nullable: true }
+        rating: { type: number, format: float, example: 4.8 }
+        active: { type: boolean }
+      required: [id, firstName, lastName, rating, active]
+
+    MasterCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName: { type: string, minLength: 1 }
+        lastName: { type: string, minLength: 1 }
+        photo: { type: string, nullable: true }
+        active: { type: boolean, default: true }
+      required: [firstName, lastName]
+
+    MasterUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName: { type: string }
+        lastName: { type: string }
+        photo: { type: string, nullable: true }
+        active: { type: boolean }
+
+    MastersPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Master" }
+        limit: { type: integer }
+        offset: { type: integer }
+        total: { type: integer }
+      required: [items, limit, offset, total]
+
+    Category:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+        icon: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+      required: [id, name]
+
+    CategoryCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        name: { type: string, minLength: 1 }
+        icon: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+      required: [name]
+
+    Service:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        categoryId: { type: integer, format: int64 }
+        name: { type: string }
+        durationMinutes: { type: integer, minimum: 1 }
+        price: { type: number, format: float }
+        active: { type: boolean }
+      required: [id, categoryId, name, durationMinutes, price, active]
+
+    ServiceCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        categoryId: { type: integer, format: int64 }
+        name: { type: string, minLength: 1 }
+        durationMinutes: { type: integer, minimum: 1 }
+        price: { type: number, format: float, minimum: 0 }
+        active: { type: boolean, default: true }
+      required: [categoryId, name, durationMinutes, price]
+
+    ServiceUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        categoryId: { type: integer, format: int64 }
+        name: { type: string }
+        durationMinutes: { type: integer, minimum: 1 }
+        price: { type: number, format: float, minimum: 0 }
+        active: { type: boolean }
+
+    ServicesPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Service" }
+        limit: { type: integer }
+        offset: { type: integer }
+        total: { type: integer }
+      required: [items, limit, offset, total]
+
+    Schedule:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        masterId: { type: integer, format: int64 }
+        workDate: { type: string, format: date }
+        startTime: { type: string, example: "10:00:00" }
+        endTime: { type: string, example: "11:00:00" }
+        available: { type: boolean }
+      required: [id, masterId, workDate, startTime, endTime, available]
+
+    ScheduleCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        masterId: { type: integer, format: int64 }
+        workDate: { type: string, format: date }
+        startTime: { type: string, example: "10:00:00" }
+        endTime: { type: string, example: "11:00:00" }
+        available: { type: boolean, default: true }
+      required: [masterId, workDate, startTime, endTime]
+
+    SchedulesPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Schedule" }
+        limit: { type: integer }
+        offset: { type: integer }
+        total: { type: integer }
+      required: [items, limit, offset, total]
+
+    AppointmentStatus:
+      type: string
+      enum: [created, confirmed, completed, cancelled, no_show]
+
+    Appointment:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        clientId: { type: integer, format: int64 }
+        masterId: { type: integer, format: int64 }
+        serviceId: { type: integer, format: int64 }
+        scheduleId: { type: integer, format: int64 }
+        status: { $ref: "#/components/schemas/AppointmentStatus" }
+        price: { type: number, format: float }
+        createdAt: { type: string, format: date-time }
+      required: [id, clientId, masterId, serviceId, scheduleId, status, price, createdAt]
+
+    AppointmentCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        clientId: { type: integer, format: int64 }
+        masterId: { type: integer, format: int64 }
+        serviceId: { type: integer, format: int64 }
+        scheduleId: { type: integer, format: int64 }
+      required: [clientId, masterId, serviceId, scheduleId]
+
+    AppointmentUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        status: { $ref: "#/components/schemas/AppointmentStatus" }
+        price: { type: number, format: float, minimum: 0 }
+
+    AppointmentsPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Appointment" }
+        limit: { type: integer }
+        offset: { type: integer }
+        total: { type: integer }
+      required: [items, limit, offset, total]
+
+    Product:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+        brand: { type: string, nullable: true }
+        price: { type: number, format: float }
+        stock: { type: integer }
+      required: [id, name, price, stock]
+
+    ProductCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        name: { type: string, minLength: 1 }
+        brand: { type: string, nullable: true }
+        price: { type: number, format: float, minimum: 0 }
+        stock: { type: integer, minimum: 0, default: 0 }
+      required: [name, price]
+
+    ProductsPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Product" }
+        limit: { type: integer }
+        offset: { type: integer }
+        total: { type: integer }
+      required: [items, limit, offset, total]
+
+    Drink:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+        price: { type: number, format: float }
+        available: { type: boolean }
+      required: [id, name, price, available]
+
+    DrinkCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        name: { type: string, minLength: 1 }
+        price: { type: number, format: float, minimum: 0 }
+        available: { type: boolean, default: true }
+      required: [name, price]
+
+    ProductOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        appointmentId: { type: integer, format: int64 }
+        productId: { type: integer, format: int64 }
+        quantity: { type: integer, minimum: 1 }
+        price: { type: number, format: float }
+        createdAt: { type: string, format: date-time }
+      required: [id, appointmentId, productId, quantity, price, createdAt]
+
+    ProductOrderCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        productId: { type: integer, format: int64 }
+        quantity: { type: integer, minimum: 1, default: 1 }
+        price: { type: number, format: float, minimum: 0 }
+      required: [productId, quantity, price]
+
+    DrinkOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        appointmentId: { type: integer, format: int64 }
+        drinkId: { type: integer, format: int64 }
+        quantity: { type: integer, minimum: 1 }
+        price: { type: number, format: float }
+        createdAt: { type: string, format: date-time }
+      required: [id, appointmentId, drinkId, quantity, price, createdAt]
+
+    DrinkOrderCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        drinkId: { type: integer, format: int64 }
+        quantity: { type: integer, minimum: 1, default: 1 }
+        price: { type: number, format: float, minimum: 0 }
+      required: [drinkId, quantity, price]
+
+    Review:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: integer, format: int64 }
+        clientId: { type: integer, format: int64 }
+        masterId: { type: integer, format: int64 }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        comment: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+      required: [id, clientId, masterId, rating, createdAt]
+
+    ReviewCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        clientId: { type: integer, format: int64 }
+        masterId: { type: integer, format: int64 }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        comment: { type: string, nullable: true }
+      required: [clientId, masterId, rating]

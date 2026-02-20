@@ -1,0 +1,411 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------< org.example:salon_project >----------------------
+[INFO] Building salon_project 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ salon_project ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ salon_project ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 99 source files with javac [debug parameters release 21] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[3,32] package io.swagger.v3.oas.models does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[4,32] package io.swagger.v3.oas.models does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[5,37] package io.swagger.v3.oas.models.info does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[6,41] package io.swagger.v3.oas.models.security does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[7,41] package io.swagger.v3.oas.models.security does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[15,12] cannot find symbol
+  symbol:   class OpenAPI
+  location: class org.example.salon_project.config.OpenApiConfig
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[15,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[15,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[18,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[16,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[18,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[15,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[15,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[15,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ReviewController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ReviewController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ReviewController.java:[16,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[18,2] cannot find symbol
+  symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[8,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/BeautyServiceMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/BeautyServiceMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/BeautyServiceMapper.java:[8,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/CategoryMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/CategoryMapper.java:[7,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/CategoryMapper.java:[9,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ClientMapper.java:[9,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ClientMapper.java:[7,1] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkMapper.java:[7,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkMapper.java:[9,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkOrderMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkOrderMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkOrderMapper.java:[8,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/MasterMapper.java:[9,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/MasterMapper.java:[7,1] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductMapper.java:[8,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductOrderMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductOrderMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductOrderMapper.java:[8,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ReviewMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ReviewMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ReviewMapper.java:[8,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ScheduleMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ScheduleMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ScheduleMapper.java:[8,2] cannot find symbol
+  symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[21,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.AppointmentController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[32,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.AppointmentController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[39,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.AppointmentController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[45,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.AppointmentController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[21,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.BeautyServiceController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[32,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.BeautyServiceController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[38,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.BeautyServiceController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[46,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.BeautyServiceController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[24,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.CategoryController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[31,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.CategoryController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[22,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[30,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[37,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[43,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[50,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[24,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.DrinkController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[32,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.DrinkController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[21,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[30,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[37,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[43,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[50,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[22,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.OrderController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[31,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.OrderController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[21,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ProductController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[31,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ProductController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ReviewController.java:[23,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ReviewController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[24,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ScheduleController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[37,6] cannot find symbol
+  symbol:   class Operation
+  location: class org.example.salon_project.controller.ScheduleController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[11,6] cannot find symbol
+  symbol:   class Mapping
+  location: interface org.example.salon_project.mapper.AppointmentMapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[12,6] cannot find symbol
+  symbol:   class Mapping
+  location: interface org.example.salon_project.mapper.AppointmentMapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[13,6] cannot find symbol
+  symbol:   class Mapping
+  location: interface org.example.salon_project.mapper.AppointmentMapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[14,6] cannot find symbol
+  symbol:   class Mapping
+  location: interface org.example.salon_project.mapper.AppointmentMapper
+[INFO] 100 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.773 s
+[INFO] Finished at: 2026-02-20T21:17:09+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:compile (default-compile) on project salon_project: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[3,32] package io.swagger.v3.oas.models does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[4,32] package io.swagger.v3.oas.models does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[5,37] package io.swagger.v3.oas.models.info does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[6,41] package io.swagger.v3.oas.models.security does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[7,41] package io.swagger.v3.oas.models.security does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/config/OpenApiConfig.java:[15,12] cannot find symbol
+[ERROR]   symbol:   class OpenAPI
+[ERROR]   location: class org.example.salon_project.config.OpenApiConfig
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[15,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[15,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[18,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[16,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[18,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[15,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[15,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[15,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ReviewController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ReviewController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ReviewController.java:[16,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[3,37] package io.swagger.v3.oas.annotations does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[4,42] package io.swagger.v3.oas.annotations.tags does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[18,2] cannot find symbol
+[ERROR]   symbol: class Tag
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[8,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/BeautyServiceMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/BeautyServiceMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/BeautyServiceMapper.java:[8,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/CategoryMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/CategoryMapper.java:[7,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/CategoryMapper.java:[9,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ClientMapper.java:[9,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ClientMapper.java:[7,1] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkMapper.java:[7,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkMapper.java:[9,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkOrderMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkOrderMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/DrinkOrderMapper.java:[8,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/MasterMapper.java:[9,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/MasterMapper.java:[7,1] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductMapper.java:[8,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductOrderMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductOrderMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ProductOrderMapper.java:[8,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ReviewMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ReviewMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ReviewMapper.java:[8,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ScheduleMapper.java:[5,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ScheduleMapper.java:[6,21] package org.mapstruct does not exist
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/ScheduleMapper.java:[8,2] cannot find symbol
+[ERROR]   symbol: class Mapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[21,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.AppointmentController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[32,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.AppointmentController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[39,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.AppointmentController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/AppointmentController.java:[45,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.AppointmentController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[21,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.BeautyServiceController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[32,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.BeautyServiceController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[38,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.BeautyServiceController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/BeautyServiceController.java:[46,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.BeautyServiceController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[24,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.CategoryController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/CategoryController.java:[31,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.CategoryController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[22,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[30,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[37,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[43,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ClientController.java:[50,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ClientController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[24,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.DrinkController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/DrinkController.java:[32,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.DrinkController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[21,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[30,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[37,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[43,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/MasterController.java:[50,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.MasterController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[22,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.OrderController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/OrderController.java:[31,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.OrderController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[21,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ProductController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ProductController.java:[31,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ProductController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ReviewController.java:[23,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ReviewController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[24,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ScheduleController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/controller/ScheduleController.java:[37,6] cannot find symbol
+[ERROR]   symbol:   class Operation
+[ERROR]   location: class org.example.salon_project.controller.ScheduleController
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[11,6] cannot find symbol
+[ERROR]   symbol:   class Mapping
+[ERROR]   location: interface org.example.salon_project.mapper.AppointmentMapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[12,6] cannot find symbol
+[ERROR]   symbol:   class Mapping
+[ERROR]   location: interface org.example.salon_project.mapper.AppointmentMapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[13,6] cannot find symbol
+[ERROR]   symbol:   class Mapping
+[ERROR]   location: interface org.example.salon_project.mapper.AppointmentMapper
+[ERROR] /C:/Users/dovbn/IdeaProjects/salon_project/src/main/java/org/example/salon_project/mapper/AppointmentMapper.java:[14,6] cannot find symbol
+[ERROR]   symbol:   class Mapping
+[ERROR]   location: interface org.example.salon_project.mapper.AppointmentMapper
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

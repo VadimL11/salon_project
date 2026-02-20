@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/salon_db
+    username: salon_user
+    password: salon_pass
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+logging:
+  level:
+    root: INFO
+    org.example.salon_project: DEBUG

@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-schema
+      author: vadym
+      changes:
+        - sqlFile:
+            path: 001-create-schema.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true
