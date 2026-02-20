@@ -16,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -32,7 +31,7 @@ public class TokenAuthFilter extends OncePerRequestFilter {
 
     private static final String BEARER_TOKEN_PREFIX = "Bearer ";
 
-    private final TokenService TokenService;
+    private final TokenService tokenService;
 
     @Override
     protected void doFilterInternal(
@@ -43,21 +42,19 @@ public class TokenAuthFilter extends OncePerRequestFilter {
 
         String jwt = getJwtFromRequest(request);
 
-        if (!StringUtils.hasText(jwt) || !TokenService.isValidToken(jwt)) {
-            // No/invalid token -> continue without authentication
+        if (!StringUtils.hasText(jwt) || !tokenService.isValidToken(jwt)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String id = tokenService.getId(jwt);
-        RoleType upperRole = tokenService.getType(jwt);
+        RoleType userUpperBoundaryRole = tokenService.getType(jwt);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (RoleType role : RoleType.values()) {
-            // Spring Security convention: ROLE_*
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        for (RoleType type : RoleType.values()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + type.name()));
 
-            if (role.equals(upperRole)) {
+            if (type.equals(userUpperBoundaryRole)) {
                 break;
             }
         }
