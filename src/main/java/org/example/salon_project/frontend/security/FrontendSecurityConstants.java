@@ -1,0 +1,9 @@
+package org.example.salon_project.frontend.security;
+
+public final class FrontendSecurityConstants {
+
+    public static final String AUTH_COOKIE_NAME = "SALON_AUTH";
+
+    private FrontendSecurityConstants() {
+    }
+}

@@ -1,0 +1,82 @@
+package org.example.salon_project.frontend.controller;
+
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.example.salon_project.frontend.dto.AuthResultDto;
+import org.example.salon_project.frontend.dto.FrontendSessionDto;
+import org.example.salon_project.frontend.dto.GuestRequest;
+import org.example.salon_project.frontend.dto.LoginRequest;
+import org.example.salon_project.frontend.dto.RegisterRequest;
+import org.example.salon_project.frontend.security.FrontendSecurityConstants;
+import org.example.salon_project.frontend.service.FrontendAuthService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.time.Duration;
+
+@RestController
+@RequestMapping("/api/v1/frontend/auth")
+@RequiredArgsConstructor
+public class FrontendAuthController {
+
+    private final FrontendAuthService authService;
+
+    @PostMapping("/register")
+    public AuthResultDto register(@Valid @RequestBody RegisterRequest request, HttpServletResponse response) {
+        var outcome = authService.register(request);
+        setCookieIfNeeded(response, outcome.token());
+        return outcome.body();
+    }
+
+    @PostMapping("/login")
+    public AuthResultDto login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
+        var outcome = authService.login(request);
+        setCookieIfNeeded(response, outcome.token());
+        return outcome.body();
+    }
+
+    @PostMapping("/guest")
+    public AuthResultDto guest(@RequestBody(required = false) GuestRequest request) {
+        return new AuthResultDto(true, "guest", null);
+    }
+
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(HttpServletResponse response) {
+        response.addHeader(HttpHeaders.SET_COOKIE, ResponseCookie.from(FrontendSecurityConstants.AUTH_COOKIE_NAME, "")
+                .httpOnly(true)
+                .path("/")
+                .sameSite("Lax")
+                .maxAge(Duration.ZERO)
+                .build()
+                .toString());
+    }
+
+    @GetMapping("/session")
+    public FrontendSessionDto session(Authentication authentication) {
+        return authService.session(authentication != null ? authentication.getName() : null);
+    }
+
+    private void setCookieIfNeeded(HttpServletResponse response, String token) {
+        if (token == null || token.isBlank()) {
+            return;
+        }
+
+        response.addHeader(HttpHeaders.SET_COOKIE, ResponseCookie.from(FrontendSecurityConstants.AUTH_COOKIE_NAME, token)
+                .httpOnly(true)
+                .path("/")
+                .sameSite("Lax")
+                .maxAge(Duration.ofDays(7))
+                .build()
+                .toString());
+    }
+}

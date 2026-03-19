@@ -1,0 +1,18 @@
+package org.example.salon_project.frontend.dto;
+
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import java.math.BigDecimal;
+
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
+public record CartItemDto(
+        @NotBlank String id,
+        @NotBlank String name,
+        @NotNull @DecimalMin("0.0") BigDecimal price,
+        @Min(1) int quantity) {
+}
