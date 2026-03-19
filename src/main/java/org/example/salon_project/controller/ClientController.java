@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.salon_project.dto.*;
 import org.example.salon_project.service.ClientService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

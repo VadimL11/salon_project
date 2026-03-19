@@ -18,6 +18,9 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "external_id", unique = true)
+    private String externalId;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -32,6 +35,13 @@ public class Client {
 
     @Column(name = "language")
     private String language;
+
+    @Column(name = "password_hash")
+    private String passwordHash;
+
+    @Column(name = "role", nullable = false)
+    @Builder.Default
+    private String role = "client";
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;

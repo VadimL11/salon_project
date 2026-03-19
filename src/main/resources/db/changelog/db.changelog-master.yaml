@@ -8,3 +8,21 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: true
             stripComments: true
+  - changeSet:
+      id: 002-frontend-contract
+      author: codex
+      changes:
+        - sqlFile:
+            path: 002-frontend-contract.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true
+  - changeSet:
+      id: 003-frontend-account-contract
+      author: codex
+      changes:
+        - sqlFile:
+            path: 003-frontend-account-contract.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true

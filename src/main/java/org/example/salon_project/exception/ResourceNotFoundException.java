@@ -9,6 +9,10 @@ public class ResourceNotFoundException extends RuntimeException {
         super(entity + " not found with id: " + id);
     }
 
+    public ResourceNotFoundException(String entity, String id) {
+        super(entity + " not found with id: " + id);
+    }
+
     public ResourceNotFoundException(String message) {
         super(message);
     }

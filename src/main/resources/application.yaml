@@ -10,7 +10,7 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
   jackson:
-    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
 
 security:
   jwt:

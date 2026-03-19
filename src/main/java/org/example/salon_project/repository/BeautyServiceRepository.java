@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,4 +16,8 @@ public interface BeautyServiceRepository extends JpaRepository<BeautyService, Lo
     Page<BeautyService> findByActive(boolean active, Pageable pageable);
 
     Page<BeautyService> findByCategoryIdAndActive(Long categoryId, boolean active, Pageable pageable);
+
+    List<BeautyService> findByExternalIdIsNotNullOrderBySortOrderAsc();
+
+    Optional<BeautyService> findByExternalId(String externalId);
 }

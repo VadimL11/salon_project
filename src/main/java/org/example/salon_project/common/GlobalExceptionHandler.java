@@ -6,6 +6,7 @@ import org.example.salon_project.exception.ConflictException;
 import org.example.salon_project.exception.NotFoundException;
 import org.example.salon_project.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -78,6 +79,24 @@ public class GlobalExceptionHandler {
                                 .code("VALIDATION_ERROR")
                                 .message("Invalid request")
                                 .details(details)
+                                .build();
+        }
+
+        @ResponseStatus(HttpStatus.BAD_REQUEST)
+        @ExceptionHandler(IllegalArgumentException.class)
+        public ApiError handleIllegalArgument(IllegalArgumentException ex) {
+                return ApiError.builder()
+                                .code("VALIDATION_ERROR")
+                                .message(ex.getMessage())
+                                .build();
+        }
+
+        @ResponseStatus(HttpStatus.FORBIDDEN)
+        @ExceptionHandler(AccessDeniedException.class)
+        public ApiError handleAccessDenied(AccessDeniedException ex) {
+                return ApiError.builder()
+                                .code("FORBIDDEN")
+                                .message(ex.getMessage())
                                 .build();
         }
 

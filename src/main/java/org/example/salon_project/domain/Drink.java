@@ -18,8 +18,24 @@ public class Drink {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "external_id", unique = true)
+    private String externalId;
+
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "ua", column = @Column(name = "title_ua", nullable = false)),
+            @AttributeOverride(name = "de", column = @Column(name = "title_de", nullable = false)),
+            @AttributeOverride(name = "gb", column = @Column(name = "title_gb", nullable = false))
+    })
+    @Builder.Default
+    private LocalizedTextEmbeddable title = LocalizedTextEmbeddable.builder().build();
+
+    @Column(name = "icon", nullable = false)
+    @Builder.Default
+    private String icon = "";
 
     @Column(name = "price", nullable = false)
     @Builder.Default
@@ -28,4 +44,8 @@ public class Drink {
     @Column(name = "available", nullable = false)
     @Builder.Default
     private boolean available = true;
+
+    @Column(name = "sort_order", nullable = false)
+    @Builder.Default
+    private Integer sortOrder = 0;
 }

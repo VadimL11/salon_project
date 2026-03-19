@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.salon_project.security.TokenAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -63,14 +64,32 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/api/v1/auth/**" // наприклад: /login, /sign-up, /refresh
                         ).permitAll()
-                        // Everything else requires authentication
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/frontend/bootstrap",
+                                "/api/v1/frontend/service-categories",
+                                "/api/v1/frontend/services",
+                                "/api/v1/frontend/masters",
+                                "/api/v1/frontend/booking-slots",
+                                "/api/v1/frontend/care-products",
+                                "/api/v1/frontend/drinks",
+                                "/api/v1/frontend/trends",
+                                "/api/v1/frontend/auth/session").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/frontend/auth/register",
+                                "/api/v1/frontend/auth/login",
+                                "/api/v1/frontend/auth/guest",
+                                "/api/v1/frontend/auth/logout",
+                                "/api/v1/frontend/bookings",
+                                "/api/v1/frontend/care-product-checkouts",
+                                "/api/v1/frontend/drink-orders").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(cors -> cors.configurationSource(_ -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(List.of("*"));
+                    configuration.setAllowedOriginPatterns(List.of("*"));
                     configuration.setAllowedMethods(List.of("*"));
                     configuration.setAllowedHeaders(List.of("*"));
+                    configuration.setAllowCredentials(true);
                     return configuration;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)

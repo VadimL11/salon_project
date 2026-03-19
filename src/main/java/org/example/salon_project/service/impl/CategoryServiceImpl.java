@@ -1,7 +1,6 @@
 package org.example.salon_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.salon_project.domain.Category;
 import org.example.salon_project.dto.CategoryCreateRequest;
 import org.example.salon_project.dto.CategoryDto;
 import org.example.salon_project.mapper.CategoryMapper;
