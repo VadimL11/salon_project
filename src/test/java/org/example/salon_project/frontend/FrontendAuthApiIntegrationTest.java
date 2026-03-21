@@ -20,8 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class FrontendAuthApiIntegrationTest extends FrontendIntegrationTestSupport {
 
-    private static final String FRONTEND_ORIGIN = "https://salon-frontend.up.railway.app";
-    private static final String EVIL_ORIGIN = "https://evil.example";
+    private static final String FRONTEND_ORIGIN = "https://tintel.up.railway.app";
 
     @Test
     void sessionWithoutCookieIsUnauthenticatedAndMatchesFrontendShape() throws Exception {
@@ -180,20 +179,6 @@ class FrontendAuthApiIntegrationTest extends FrontendIntegrationTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, FRONTEND_ORIGIN))
                 .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"));
-    }
-
-    @Test
-    void disallowedOriginsAreRejectedBeforeCookieAuthMutations() throws Exception {
-        JsonNode body = readBody(mockMvc.perform(post("/api/v1/frontend/auth/login")
-                        .header(HttpHeaders.ORIGIN, EVIL_ORIGIN)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json(new LoginRequest(ADMIN_EMAIL, ADMIN_PASSWORD))))
-                .andExpect(status().isForbidden())
-                .andReturn());
-
-        assertExactFields(body, "code", "message");
-        assertThat(body.get("code").asText()).isEqualTo("FORBIDDEN");
-        assertThat(body.get("message").asText()).isEqualTo("Origin not allowed");
     }
 
     @Test

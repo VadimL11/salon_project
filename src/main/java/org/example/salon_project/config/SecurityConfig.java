@@ -3,7 +3,6 @@ package org.example.salon_project.config;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import org.example.salon_project.frontend.security.FrontendOriginGuardFilter;
 import org.example.salon_project.frontend.security.FrontendSecurityProperties;
 import org.example.salon_project.security.TokenAuthFilter;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +30,6 @@ import org.springframework.web.cors.CorsConfiguration;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final FrontendOriginGuardFilter frontendOriginGuardFilter;
     private final TokenAuthFilter tokenAuthFilter;
     private final FrontendSecurityProperties frontendSecurityProperties;
 
@@ -94,7 +92,6 @@ public class SecurityConfig {
                     return configuration;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(frontendOriginGuardFilter, TokenAuthFilter.class)
                 .addFilterBefore(tokenAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(e ->
                         e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))

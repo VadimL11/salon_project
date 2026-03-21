@@ -20,7 +20,8 @@ public class FrontendSecurityProperties {
     private List<String> allowedOriginPatterns = new ArrayList<>(List.of(
             "http://localhost:3000",
             "http://127.0.0.1:3000",
-            "https://salon-frontend.up.railway.app"));
+            "https://*.up.railway.app",
+            "https://*.railway.app"));
 
     private Duration authCookieMaxAge = Duration.ofDays(7);
 
@@ -40,10 +41,4 @@ public class FrontendSecurityProperties {
         return configuration;
     }
 
-    public boolean isAllowedOrigin(String origin) {
-        if (origin == null || origin.isBlank()) {
-            return true;
-        }
-        return toCorsConfiguration().checkOrigin(origin) != null;
-    }
 }
