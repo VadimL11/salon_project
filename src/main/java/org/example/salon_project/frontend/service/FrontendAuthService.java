@@ -13,6 +13,7 @@ import org.example.salon_project.security.RoleType;
 import org.example.salon_project.security.TokenService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class FrontendAuthService {
                 .externalId(makeId("account"))
                 .firstName(request.firstName().trim())
                 .lastName(request.lastName().trim())
-                .phone(request.phone().trim())
+                .phone(normalizePhone(request.phone()))
                 .email(normalizedEmail)
                 .passwordHash(passwordEncoder.encode(request.password()))
                 .role("client")
@@ -95,6 +96,13 @@ public class FrontendAuthService {
 
     private String makeId(String prefix) {
         return prefix + "-" + UUID.randomUUID();
+    }
+
+    private String normalizePhone(String phone) {
+        if (!StringUtils.hasText(phone)) {
+            return "";
+        }
+        return phone.trim();
     }
 
     public record AuthOutcome(AuthResultDto body, String token) {

@@ -1,3 +1,6 @@
+server:
+  forward-headers-strategy: framework
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/salon_db

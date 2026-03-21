@@ -3,6 +3,7 @@ package org.example.salon_project.config;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import org.example.salon_project.frontend.security.FrontendSecurityProperties;
 import org.example.salon_project.security.TokenAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +31,7 @@ import org.springframework.web.cors.CorsConfiguration;
 public class SecurityConfig {
 
     private final TokenAuthFilter tokenAuthFilter;
+    private final FrontendSecurityProperties frontendSecurityProperties;
 
     /**
      * Custom UserDetailsService bean to disable Spring Boot's default in-memory user.
@@ -64,6 +66,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/api/v1/auth/**" // наприклад: /login, /sign-up, /refresh
                         ).permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/frontend/bootstrap",
                                 "/api/v1/frontend/service-categories",
@@ -86,10 +89,11 @@ public class SecurityConfig {
                 )
                 .cors(cors -> cors.configurationSource(_ -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOriginPatterns(List.of("*"));
-                    configuration.setAllowedMethods(List.of("*"));
+                    configuration.setAllowedOriginPatterns(frontendSecurityProperties.getAllowedOriginPatterns());
+                    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                     configuration.setAllowedHeaders(List.of("*"));
                     configuration.setAllowCredentials(true);
+                    configuration.setMaxAge(java.time.Duration.ofHours(1));
                     return configuration;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
