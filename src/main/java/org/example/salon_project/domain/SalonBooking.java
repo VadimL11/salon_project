@@ -64,6 +64,9 @@ public class SalonBooking {
     @Column(name = "customer_email")
     private String customerEmail;
 
+    @Column(name = "guest_external_id")
+    private String guestExternalId;
+
     @Column(name = "booking_date", nullable = false)
     private LocalDate bookingDate;
 

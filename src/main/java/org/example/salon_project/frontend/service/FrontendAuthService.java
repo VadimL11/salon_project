@@ -5,8 +5,10 @@ import org.example.salon_project.domain.Client;
 import org.example.salon_project.frontend.dto.AuthResultDto;
 import org.example.salon_project.frontend.dto.FrontendSessionDto;
 import org.example.salon_project.frontend.dto.FrontendUserDto;
+import org.example.salon_project.frontend.dto.GuestRequest;
 import org.example.salon_project.frontend.dto.LoginRequest;
 import org.example.salon_project.frontend.dto.RegisterRequest;
+import org.example.salon_project.frontend.security.FrontendSecurityConstants;
 import org.example.salon_project.frontend.mapper.FrontendMapper;
 import org.example.salon_project.repository.ClientRepository;
 import org.example.salon_project.security.RoleType;
@@ -63,6 +65,11 @@ public class FrontendAuthService {
         return authenticatedOutcome(client);
     }
 
+    public AuthOutcome guest(GuestRequest request) {
+        String token = tokenService.generateToken(makeId(FrontendSecurityConstants.GUEST_ID_PREFIX), RoleType.GUEST);
+        return new AuthOutcome(new AuthResultDto(true, "guest", null), token);
+    }
+
     public FrontendSessionDto session(String externalId) {
         if (externalId == null) {
             return new FrontendSessionDto(false, null, null);
@@ -71,6 +78,10 @@ public class FrontendAuthService {
         return clientRepository.findByExternalId(externalId)
                 .map(client -> new FrontendSessionDto(true, client.getRole(), mapper.toUserDto(client)))
                 .orElseGet(() -> new FrontendSessionDto(false, null, null));
+    }
+
+    public FrontendSessionDto guestSession() {
+        return new FrontendSessionDto(true, "guest", null);
     }
 
     public FrontendUserDto findUser(String externalId) {

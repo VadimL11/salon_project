@@ -41,8 +41,8 @@ public class FrontendCheckoutService {
     private final FrontendMapper mapper;
 
     @Transactional
-    public CareProductCheckoutResponse checkout(CareProductCheckoutRequest request, String authenticatedExternalId) {
-        Client client = resolveAuthenticatedClient(authenticatedExternalId);
+    public CareProductCheckoutResponse checkout(CareProductCheckoutRequest request, String authenticatedExternalId, boolean guest) {
+        Client client = guest ? null : resolveAuthenticatedClient(authenticatedExternalId);
         List<CartItemDto> canonicalItems = request.items().stream()
                 .map(this::resolveCartItem)
                 .toList();
@@ -54,6 +54,7 @@ public class FrontendCheckoutService {
         FrontendCareOrder order = FrontendCareOrder.builder()
                 .externalId(makeId("care-order"))
                 .client(client)
+                .guestExternalId(guest ? authenticatedExternalId : null)
                 .customerEmail(resolveCustomerEmail(client))
                 .totalAmount(total)
                 .build();
@@ -86,14 +87,15 @@ public class FrontendCheckoutService {
     }
 
     @Transactional
-    public DrinkOrderResponse orderDrink(DrinkOrderRequest request, String authenticatedExternalId) {
+    public DrinkOrderResponse orderDrink(DrinkOrderRequest request, String authenticatedExternalId, boolean guest) {
         drinkRepository.findByExternalId(request.drinkId())
                 .orElseThrow(() -> new IllegalArgumentException("Unknown drink: " + request.drinkId()));
 
-        Client client = resolveAuthenticatedClient(authenticatedExternalId);
+        Client client = guest ? null : resolveAuthenticatedClient(authenticatedExternalId);
         FrontendDrinkOrder order = frontendDrinkOrderRepository.save(FrontendDrinkOrder.builder()
                 .externalId(makeId("drink-order"))
                 .client(client)
+                .guestExternalId(guest ? authenticatedExternalId : null)
                 .customerEmail(resolveCustomerEmail(client))
                 .drinkExternalId(request.drinkId())
                 .build());
@@ -107,18 +109,18 @@ public class FrontendCheckoutService {
     }
 
     @Transactional
-    public void cancelCareOrder(String externalId, String authenticatedExternalId, boolean admin) {
+    public void cancelCareOrder(String externalId, String authenticatedExternalId, boolean admin, boolean guest) {
         FrontendCareOrder order = frontendCareOrderRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new ResourceNotFoundException("CareOrder", externalId));
-        validateOrderAccess(order.getClient(), order.getCustomerEmail(), authenticatedExternalId, admin);
+        validateOrderAccess(order.getClient(), order.getGuestExternalId(), order.getCustomerEmail(), authenticatedExternalId, admin, guest);
         frontendCareOrderRepository.delete(order);
     }
 
     @Transactional
-    public void cancelDrinkOrder(String externalId, String authenticatedExternalId, boolean admin) {
+    public void cancelDrinkOrder(String externalId, String authenticatedExternalId, boolean admin, boolean guest) {
         FrontendDrinkOrder order = frontendDrinkOrderRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new ResourceNotFoundException("DrinkOrder", externalId));
-        validateOrderAccess(order.getClient(), order.getCustomerEmail(), authenticatedExternalId, admin);
+        validateOrderAccess(order.getClient(), order.getGuestExternalId(), order.getCustomerEmail(), authenticatedExternalId, admin, guest);
         frontendDrinkOrderRepository.delete(order);
     }
 
@@ -127,7 +129,7 @@ public class FrontendCheckoutService {
                 .orElseThrow(() -> new IllegalArgumentException("Unknown care product: " + item.id()));
         return new CartItemDto(
                 product.getExternalId(),
-                item.name(),
+                product.getName(),
                 product.getPrice(),
                 item.quantity());
     }
@@ -139,8 +141,16 @@ public class FrontendCheckoutService {
         return clientRepository.findByExternalId(externalId).orElse(null);
     }
 
-    private void validateOrderAccess(Client linkedClient, String customerEmail, String authenticatedExternalId, boolean admin) {
+    private void validateOrderAccess(Client linkedClient, String guestExternalId, String customerEmail,
+                                     String authenticatedExternalId, boolean admin, boolean guest) {
         if (admin) {
+            return;
+        }
+
+        if (guest) {
+            if (authenticatedExternalId == null || authenticatedExternalId.isBlank() || !authenticatedExternalId.equals(guestExternalId)) {
+                throw new AccessDeniedException("You can only cancel your own orders");
+            }
             return;
         }
 

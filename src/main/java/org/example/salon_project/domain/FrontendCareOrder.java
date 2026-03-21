@@ -47,6 +47,9 @@ public class FrontendCareOrder {
     @Column(name = "customer_email")
     private String customerEmail;
 
+    @Column(name = "guest_external_id")
+    private String guestExternalId;
+
     @Column(name = "total_amount", nullable = false)
     @Builder.Default
     private BigDecimal totalAmount = BigDecimal.ZERO;

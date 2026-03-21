@@ -1,6 +1,14 @@
 server:
   forward-headers-strategy: framework
 
+auth:
+  dev-token:
+    enabled: ${AUTH_DEV_TOKEN_ENABLED:false}
+
+frontend:
+  security:
+    allowed-origin-patterns: ${FRONTEND_SECURITY_ALLOWED_ORIGIN_PATTERNS:http://localhost:3000,http://127.0.0.1:3000,https://salon-frontend.up.railway.app}
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/salon_db

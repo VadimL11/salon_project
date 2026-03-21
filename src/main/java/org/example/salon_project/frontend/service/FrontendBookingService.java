@@ -44,38 +44,42 @@ public class FrontendBookingService {
     }
 
     @Transactional
-    public BookingRecordDto createBooking(BookingSaveRequest request, String authenticatedExternalId) {
+    public BookingRecordDto createBooking(BookingSaveRequest request, String authenticatedExternalId, boolean guest) {
         SalonBooking booking = new SalonBooking();
         booking.setExternalId(defaultId(request.id()));
         booking.setSortOrder(nextSortOrder());
-        applyRequest(booking, request, authenticatedExternalId, false);
+        applyRequest(booking, request, authenticatedExternalId, guest, false);
         return mapper.toDto(bookingRepository.save(booking));
     }
 
     @Transactional
-    public BookingRecordDto saveBooking(String externalId, BookingSaveRequest request, String authenticatedExternalId, boolean admin) {
+    public BookingRecordDto saveBooking(String externalId, BookingSaveRequest request, String authenticatedExternalId, boolean admin, boolean guest) {
         SalonBooking booking = bookingRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking", externalId));
         Client authenticatedClient = resolveAuthenticatedClient(authenticatedExternalId);
+        String requestedStatus = normalizeStatus(request.status(), booking.getStatus(), true);
 
         if (!admin) {
-            if (authenticatedClient == null) {
+            if (authenticatedClient == null && !guest) {
                 throw new AccessDeniedException("Authentication required");
             }
-            if (!belongsToClient(booking, authenticatedClient)) {
+            if (guest) {
+                if (!belongsToGuest(booking, authenticatedExternalId)) {
+                    throw new AccessDeniedException("You can only manage your own bookings");
+                }
+            } else if (!belongsToClient(booking, authenticatedClient)) {
                 throw new AccessDeniedException("You can only manage your own bookings");
             }
             if ("completed".equals(booking.getStatus()) || "cancelled".equals(booking.getStatus())) {
                 throw new IllegalArgumentException("Only active bookings can be changed");
             }
 
-            String requestedStatus = normalizeStatus(request.status(), true);
             if (!requestedStatus.equals(booking.getStatus()) && !"cancelled".equals(requestedStatus)) {
                 throw new IllegalArgumentException("Clients can only cancel their bookings");
             }
         }
 
-        applyRequest(booking, request, authenticatedExternalId, true);
+        applyRequest(booking, request, authenticatedExternalId, guest, true);
         return mapper.toDto(bookingRepository.save(booking));
     }
 
@@ -85,10 +89,10 @@ public class FrontendBookingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Booking", externalId)));
     }
 
-    private void applyRequest(SalonBooking booking, BookingSaveRequest request, String authenticatedExternalId, boolean update) {
+    private void applyRequest(SalonBooking booking, BookingSaveRequest request, String authenticatedExternalId, boolean guest, boolean update) {
         var bookingDate = parseDate(request.date());
         var bookingTime = parseTime(request.time());
-        String status = normalizeStatus(request.status(), update);
+        String status = normalizeStatus(request.status(), booking.getStatus(), update);
 
         Category category = resolveCategory(request.categoryId());
         BeautyService service = resolveService(request.serviceId());
@@ -114,12 +118,19 @@ public class FrontendBookingService {
             throw new IllegalArgumentException("The selected master already has a booking at this date and time");
         }
 
-        Client client = resolveAuthenticatedClient(authenticatedExternalId);
-        if (client == null && request.customer().email() != null && !request.customer().email().isBlank()) {
+        Client client = guest ? null : resolveAuthenticatedClient(authenticatedExternalId);
+        if (client == null && !guest && request.customer().email() != null && !request.customer().email().isBlank()) {
             client = clientRepository.findByEmailIgnoreCase(request.customer().email().trim()).orElse(null);
         }
 
         booking.setClient(client);
+        if (client != null) {
+            booking.setGuestExternalId(null);
+        } else if (guest) {
+            booking.setGuestExternalId(authenticatedExternalId);
+        } else if (!update) {
+            booking.setGuestExternalId(null);
+        }
         booking.setCategory(category);
         booking.setService(service);
         booking.setMaster(master);
@@ -178,6 +189,12 @@ public class FrontendBookingService {
         return equalsNormalizedPhone(booking.getCustomerPhone(), client.getPhone());
     }
 
+    private boolean belongsToGuest(SalonBooking booking, String guestExternalId) {
+        return guestExternalId != null
+                && !guestExternalId.isBlank()
+                && guestExternalId.equals(booking.getGuestExternalId());
+    }
+
     private java.time.LocalDate parseDate(String value) {
         try {
             return mapper.parseDate(value);
@@ -194,14 +211,11 @@ public class FrontendBookingService {
         }
     }
 
-    private String normalizeStatus(String status, boolean update) {
+    private String normalizeStatus(String status, String currentStatus, boolean update) {
         String normalized = status == null || status.isBlank()
-                ? (update ? null : "new")
+                ? (update ? currentStatus : "new")
                 : status.trim().toLowerCase();
-
-        if (normalized == null) {
-            normalized = "new";
-        }
+        normalized = normalized == null || normalized.isBlank() ? "new" : normalized;
 
         if (!VALID_STATUSES.contains(normalized)) {
             throw new IllegalArgumentException("status must be one of: new, confirmed, completed, cancelled");

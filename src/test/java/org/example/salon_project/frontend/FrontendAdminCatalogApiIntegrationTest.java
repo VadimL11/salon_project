@@ -377,4 +377,44 @@ class FrontendAdminCatalogApiIntegrationTest extends FrontendIntegrationTestSupp
                 .andExpect(status().isOk());
         assertThat(trendRepository.findByExternalId(trendId)).isEmpty();
     }
+
+    @Test
+    void updatingMissingCatalogResourceReturnsNotFoundInsteadOfCreatingNewRecord() throws Exception {
+        Cookie adminCookie = loginAsAdmin();
+        String missingId = testExternalId("missing-category");
+
+        mockMvc.perform(put("/api/v1/frontend/service-categories/{id}", missingId)
+                        .cookie(adminCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(new ServiceCategorySaveRequest(
+                                null,
+                                "missing-category",
+                                "M",
+                                new LocalizedTextDto("Missing UA", "Fehlt", "Missing"),
+                                new LocalizedTextDto("Description UA", "Beschreibung", "Description")))))
+                .andExpect(status().isNotFound());
+
+        assertThat(categoryRepository.findByExternalId(missingId)).isEmpty();
+    }
+
+    @Test
+    void servicesRejectNonPositiveDurationBeforeDatabaseConstraint() throws Exception {
+        Cookie adminCookie = loginAsAdmin();
+
+        JsonNode body = readBody(mockMvc.perform(post("/api/v1/frontend/services")
+                        .cookie(adminCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(new ServiceItemSaveRequest(
+                                testExternalId("bad-duration"),
+                                "cat-hair",
+                                new LocalizedTextDto("Service UA", "Service DE", "Service GB"),
+                                0,
+                                BigDecimal.TEN))))
+                .andExpect(status().isBadRequest())
+                .andReturn());
+
+        assertExactFields(body, "code", "message", "details", "timestamp");
+        assertThat(body.get("code").asText()).isEqualTo("VALIDATION_ERROR");
+        assertThat(body.get("details").get(0).get("field").asText()).isEqualTo("durationMinutes");
+    }
 }

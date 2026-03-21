@@ -20,6 +20,7 @@ import org.example.salon_project.frontend.dto.TrendSaveRequest;
 import org.example.salon_project.frontend.service.FrontendCatalogService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,9 +41,9 @@ public class FrontendCatalogController {
 
     @GetMapping("/bootstrap")
     public FrontendBootstrapDto bootstrap(Authentication authentication) {
-        boolean admin = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
-        return catalogService.bootstrap(authentication != null ? authentication.getName() : null, admin);
+        boolean admin = hasRole(authentication, "ROLE_ADMIN");
+        boolean guest = hasRole(authentication, "ROLE_GUEST");
+        return catalogService.bootstrap(authentication != null ? authentication.getName() : null, admin, guest);
     }
 
     @GetMapping("/service-categories")
@@ -217,5 +218,14 @@ public class FrontendCatalogController {
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteTrend(@PathVariable String id) {
         catalogService.deleteTrend(id);
+    }
+
+    private boolean hasRole(Authentication authentication, String role) {
+        if (authentication == null) {
+            return false;
+        }
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role::equals);
     }
 }

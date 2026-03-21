@@ -96,6 +96,28 @@ class FrontendBookingAndCheckoutApiIntegrationTest extends FrontendIntegrationTe
         assertThat(updateBody.get("status").asText()).isEqualTo("confirmed");
         assertThat(updateBody.get("note").asText()).isEqualTo("Confirmed by admin.");
 
+        BookingSaveRequest preserveStatusRequest = new BookingSaveRequest(
+                null,
+                new BookingCustomerDto("Book", "Client", "+49 30 555 9911", email),
+                "cat-hair",
+                "srv-signature-cut",
+                "master-anna",
+                bookingDate,
+                "19:05",
+                null,
+                "Status should stay confirmed.",
+                null);
+
+        JsonNode preserveStatusBody = readBody(mockMvc.perform(put("/api/v1/frontend/bookings/{id}", bookingId)
+                        .cookie(adminCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(preserveStatusRequest)))
+                .andExpect(status().isOk())
+                .andReturn());
+
+        assertThat(preserveStatusBody.get("status").asText()).isEqualTo("confirmed");
+        assertThat(preserveStatusBody.get("note").asText()).isEqualTo("Status should stay confirmed.");
+
         MvcResult listResult = mockMvc.perform(get("/api/v1/frontend/bookings").cookie(adminCookie))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -181,8 +203,8 @@ class FrontendBookingAndCheckoutApiIntegrationTest extends FrontendIntegrationTe
     @Test
     void careProductCheckoutMatchesFrontendShapeAndUsesCatalogPrices() throws Exception {
         CareProductCheckoutRequest request = new CareProductCheckoutRequest(List.of(
-                new CartItemDto("prod-gold-shampoo", "Gold Recovery Shampoo", BigDecimal.valueOf(999), 2),
-                new CartItemDto("prod-argan-serum", "Argan Shine Serum", BigDecimal.ONE, 1)
+                new CartItemDto("prod-gold-shampoo", "Tampered Name", BigDecimal.valueOf(999), 2),
+                new CartItemDto("prod-argan-serum", "Another Fake Name", BigDecimal.ONE, 1)
         ));
 
         MvcResult result = mockMvc.perform(post("/api/v1/frontend/care-product-checkouts")
@@ -197,6 +219,8 @@ class FrontendBookingAndCheckoutApiIntegrationTest extends FrontendIntegrationTe
         assertThat(body.get("id").asText()).isNotBlank();
         assertThat(body.get("items").size()).isEqualTo(2);
         assertExactFields(body.get("items").get(0), "id", "name", "price", "quantity");
+        assertThat(body.get("items").get(0).get("name").asText()).isEqualTo("Gold Recovery Shampoo");
+        assertThat(body.get("items").get(1).get("name").asText()).isEqualTo("Argan Shine Serum");
         assertThat(body.get("items").get(0).get("price").decimalValue()).isEqualByComparingTo("29");
         assertThat(body.get("items").get(1).get("price").decimalValue()).isEqualByComparingTo("38");
         assertThat(body.get("total").decimalValue()).isEqualByComparingTo("96");
@@ -286,6 +310,87 @@ class FrontendBookingAndCheckoutApiIntegrationTest extends FrontendIntegrationTe
 
         assertThat(bootstrapBody.get("careOrders").isEmpty()).isTrue();
         assertThat(bootstrapBody.get("drinkOrders").isEmpty()).isTrue();
+    }
+
+    @Test
+    void guestSessionOwnsBookingsAndOrdersAcrossBootstrapAndCancellation() throws Exception {
+        Cookie guestCookie = loginAsGuest();
+        String bookingId = testExternalId("guest-booking");
+        String bookingDate = randomFutureDate();
+
+        BookingSaveRequest bookingRequest = new BookingSaveRequest(
+                bookingId,
+                new BookingCustomerDto("Guest", "Visitor", "+49 30 555 8800", null),
+                "cat-hair",
+                "srv-signature-cut",
+                "master-anna",
+                bookingDate,
+                "18:15",
+                null,
+                "Guest booking",
+                null);
+
+        JsonNode bookingBody = readBody(mockMvc.perform(post("/api/v1/frontend/bookings")
+                        .cookie(guestCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(bookingRequest)))
+                .andExpect(status().isOk())
+                .andReturn());
+        assertThat(bookingBody.get("id").asText()).isEqualTo(bookingId);
+
+        JsonNode careOrderBody = readBody(mockMvc.perform(post("/api/v1/frontend/care-product-checkouts")
+                        .cookie(guestCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(new CareProductCheckoutRequest(List.of(
+                                new CartItemDto("prod-gold-shampoo", "Ignored", BigDecimal.ZERO, 1)
+                        )))))
+                .andExpect(status().isOk())
+                .andReturn());
+
+        JsonNode drinkOrderBody = readBody(mockMvc.perform(post("/api/v1/frontend/drink-orders")
+                        .cookie(guestCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(new DrinkOrderRequest("drink-espresso"))))
+                .andExpect(status().isOk())
+                .andReturn());
+
+        JsonNode bootstrapBeforeCancel = readBody(mockMvc.perform(get("/api/v1/frontend/bootstrap").cookie(guestCookie))
+                .andExpect(status().isOk())
+                .andReturn());
+        assertThat(bootstrapBeforeCancel.get("bookings").size()).isEqualTo(1);
+        assertThat(bootstrapBeforeCancel.get("careOrders").size()).isEqualTo(1);
+        assertThat(bootstrapBeforeCancel.get("drinkOrders").size()).isEqualTo(1);
+
+        JsonNode cancelledBooking = readBody(mockMvc.perform(put("/api/v1/frontend/bookings/{id}", bookingId)
+                        .cookie(guestCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(new BookingSaveRequest(
+                                null,
+                                new BookingCustomerDto("Guest", "Visitor", "+49 30 555 8800", null),
+                                "cat-hair",
+                                "srv-signature-cut",
+                                "master-anna",
+                                bookingDate,
+                                "18:15",
+                                "cancelled",
+                                "Guest cancelled",
+                                null))))
+                .andExpect(status().isOk())
+                .andReturn());
+        assertThat(cancelledBooking.get("status").asText()).isEqualTo("cancelled");
+
+        mockMvc.perform(delete("/api/v1/frontend/care-product-checkouts/{id}", careOrderBody.get("id").asText()).cookie(guestCookie))
+                .andExpect(status().isOk());
+        mockMvc.perform(delete("/api/v1/frontend/drink-orders/{id}", drinkOrderBody.get("id").asText()).cookie(guestCookie))
+                .andExpect(status().isOk());
+
+        JsonNode bootstrapAfterCancel = readBody(mockMvc.perform(get("/api/v1/frontend/bootstrap").cookie(guestCookie))
+                .andExpect(status().isOk())
+                .andReturn());
+        assertThat(bootstrapAfterCancel.get("bookings").size()).isEqualTo(1);
+        assertThat(bootstrapAfterCancel.get("bookings").get(0).get("status").asText()).isEqualTo("cancelled");
+        assertThat(bootstrapAfterCancel.get("careOrders").isEmpty()).isTrue();
+        assertThat(bootstrapAfterCancel.get("drinkOrders").isEmpty()).isTrue();
     }
 
     private String randomFutureDate() {

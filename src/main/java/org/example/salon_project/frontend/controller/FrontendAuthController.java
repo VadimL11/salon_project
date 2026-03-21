@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,8 +56,12 @@ public class FrontendAuthController {
     }
 
     @PostMapping("/guest")
-    public AuthResultDto guest(@RequestBody(required = false) GuestRequest request) {
-        return new AuthResultDto(true, "guest", null);
+    public AuthResultDto guest(@RequestBody(required = false) GuestRequest request,
+                               HttpServletRequest requestContext,
+                               HttpServletResponse response) {
+        var outcome = authService.guest(request);
+        setCookieIfNeeded(requestContext, response, outcome.token());
+        return outcome.body();
     }
 
     @PostMapping("/logout")
@@ -67,6 +72,9 @@ public class FrontendAuthController {
 
     @GetMapping("/session")
     public FrontendSessionDto session(Authentication authentication) {
+        if (hasRole(authentication, "ROLE_GUEST")) {
+            return authService.guestSession();
+        }
         return authService.session(authentication != null ? authentication.getName() : null);
     }
 
@@ -87,5 +95,14 @@ public class FrontendAuthController {
                 .sameSite(secureRequest ? CROSS_SITE_SAME_SITE : LOCAL_SAME_SITE)
                 .maxAge(maxAge)
                 .build();
+    }
+
+    private boolean hasRole(Authentication authentication, String role) {
+        if (authentication == null) {
+            return false;
+        }
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role::equals);
     }
 }

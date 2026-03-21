@@ -41,6 +41,9 @@ public class FrontendDrinkOrder {
     @Column(name = "customer_email")
     private String customerEmail;
 
+    @Column(name = "guest_external_id")
+    private String guestExternalId;
+
     @Column(name = "drink_external_id", nullable = false)
     private String drinkExternalId;
 

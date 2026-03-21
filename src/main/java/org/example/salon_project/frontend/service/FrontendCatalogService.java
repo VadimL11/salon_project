@@ -72,8 +72,9 @@ public class FrontendCatalogService {
     private final FrontendDrinkOrderRepository frontendDrinkOrderRepository;
     private final FrontendMapper mapper;
 
-    public FrontendBootstrapDto bootstrap(String authenticatedExternalId, boolean admin) {
-        Client authenticatedClient = admin ? null : findClient(authenticatedExternalId);
+    public FrontendBootstrapDto bootstrap(String authenticatedExternalId, boolean admin, boolean guest) {
+        Client authenticatedClient = admin || guest ? null : findClient(authenticatedExternalId);
+        String guestExternalId = guest ? authenticatedExternalId : null;
         return new FrontendBootstrapDto(
                 listCategories(),
                 listServices(),
@@ -82,9 +83,9 @@ public class FrontendCatalogService {
                 listCareProducts(),
                 listDrinks(),
                 listTrends(),
-                listBookings(authenticatedClient, admin),
-                listCareOrders(authenticatedClient, admin),
-                listDrinkOrders(authenticatedClient, admin));
+                listBookings(authenticatedClient, guestExternalId, admin),
+                listCareOrders(authenticatedClient, guestExternalId, admin),
+                listDrinkOrders(authenticatedClient, guestExternalId, admin));
     }
 
     public List<ServiceCategoryDto> listCategories() {
@@ -119,7 +120,7 @@ public class FrontendCatalogService {
     public ServiceCategoryDto saveCategory(ServiceCategorySaveRequest request) {
         Category category = request.id() == null
                 ? new Category()
-                : categoryRepository.findByExternalId(request.id()).orElseGet(Category::new);
+                : findCategory(request.id());
 
         if (category.getId() == null) {
             category.setExternalId(defaultId(request.id(), "cat"));
@@ -147,7 +148,7 @@ public class FrontendCatalogService {
         Category category = findCategory(request.categoryId());
         BeautyService service = request.id() == null
                 ? new BeautyService()
-                : beautyServiceRepository.findByExternalId(request.id()).orElseGet(BeautyService::new);
+                : findService(request.id());
 
         if (service.getId() == null) {
             service.setExternalId(defaultId(request.id(), "service"));
@@ -160,7 +161,7 @@ public class FrontendCatalogService {
         service.setCategory(category);
         service.setTitle(mapper.toEmbeddable(request.title()));
         service.setName(primaryText(request.title()));
-        service.setDurationMinutes(Math.max(request.durationMinutes(), 0));
+        service.setDurationMinutes(request.durationMinutes());
         service.setPrice(defaultPrice(request.price()));
         return mapper.toDto(beautyServiceRepository.save(service));
     }
@@ -174,7 +175,7 @@ public class FrontendCatalogService {
     public MasterDto saveMaster(MasterSaveRequest request) {
         Master master = request.id() == null
                 ? new Master()
-                : masterRepository.findByExternalId(request.id()).orElseGet(Master::new);
+                : findMaster(request.id());
 
         if (master.getId() == null) {
             master.setExternalId(defaultId(request.id(), "master"));
@@ -205,7 +206,7 @@ public class FrontendCatalogService {
     public BookingSlotDto saveBookingSlot(BookingSlotSaveRequest request) {
         BookingSlot slot = request.id() == null
                 ? new BookingSlot()
-                : bookingSlotRepository.findByExternalId(request.id()).orElseGet(BookingSlot::new);
+                : findBookingSlot(request.id());
 
         if (slot.getId() == null) {
             slot.setExternalId(defaultId(request.id(), "slot"));
@@ -236,7 +237,7 @@ public class FrontendCatalogService {
     public CareProductDto saveCareProduct(CareProductSaveRequest request) {
         Product product = request.id() == null
                 ? new Product()
-                : productRepository.findByExternalId(request.id()).orElseGet(Product::new);
+                : findProduct(request.id());
 
         if (product.getId() == null) {
             product.setExternalId(defaultId(request.id(), "product"));
@@ -263,7 +264,7 @@ public class FrontendCatalogService {
     public DrinkItemDto saveDrink(DrinkItemSaveRequest request) {
         Drink drink = request.id() == null
                 ? new Drink()
-                : drinkRepository.findByExternalId(request.id()).orElseGet(Drink::new);
+                : findDrink(request.id());
 
         if (drink.getId() == null) {
             drink.setExternalId(defaultId(request.id(), "drink"));
@@ -289,7 +290,7 @@ public class FrontendCatalogService {
     public TrendDto saveTrend(TrendSaveRequest request) {
         Trend trend = request.id() == null
                 ? new Trend()
-                : trendRepository.findByExternalId(request.id()).orElseGet(Trend::new);
+                : findTrend(request.id());
 
         if (trend.getId() == null) {
             trend.setExternalId(defaultId(request.id(), "trend"));
@@ -306,23 +307,29 @@ public class FrontendCatalogService {
         return mapper.toDto(trendRepository.save(trend));
     }
 
-    private List<org.example.salon_project.frontend.dto.BookingRecordDto> listBookings(Client authenticatedClient, boolean admin) {
+    private List<org.example.salon_project.frontend.dto.BookingRecordDto> listBookings(Client authenticatedClient, String guestExternalId, boolean admin) {
         return salonBookingRepository.findAllByOrderBySortOrderAsc().stream()
-                .filter(booking -> admin || (authenticatedClient != null && belongsToClient(booking, authenticatedClient)))
+                .filter(booking -> admin
+                        || (authenticatedClient != null && belongsToClient(booking, authenticatedClient))
+                        || belongsToGuest(booking.getGuestExternalId(), guestExternalId))
                 .map(mapper::toDto)
                 .toList();
     }
 
-    private List<org.example.salon_project.frontend.dto.CareOrderRecordDto> listCareOrders(Client authenticatedClient, boolean admin) {
+    private List<org.example.salon_project.frontend.dto.CareOrderRecordDto> listCareOrders(Client authenticatedClient, String guestExternalId, boolean admin) {
         return frontendCareOrderRepository.findAllByOrderByCreatedAtDesc().stream()
-                .filter(order -> admin || (authenticatedClient != null && belongsToClient(order.getClient(), order.getCustomerEmail(), authenticatedClient)))
+                .filter(order -> admin
+                        || (authenticatedClient != null && belongsToClient(order.getClient(), order.getCustomerEmail(), authenticatedClient))
+                        || belongsToGuest(order.getGuestExternalId(), guestExternalId))
                 .map(mapper::toDto)
                 .toList();
     }
 
-    private List<org.example.salon_project.frontend.dto.DrinkOrderRecordDto> listDrinkOrders(Client authenticatedClient, boolean admin) {
+    private List<org.example.salon_project.frontend.dto.DrinkOrderRecordDto> listDrinkOrders(Client authenticatedClient, String guestExternalId, boolean admin) {
         return frontendDrinkOrderRepository.findAllByOrderByCreatedAtDesc().stream()
-                .filter(order -> admin || (authenticatedClient != null && belongsToClient(order.getClient(), order.getCustomerEmail(), authenticatedClient)))
+                .filter(order -> admin
+                        || (authenticatedClient != null && belongsToClient(order.getClient(), order.getCustomerEmail(), authenticatedClient))
+                        || belongsToGuest(order.getGuestExternalId(), guestExternalId))
                 .map(mapper::toDto)
                 .toList();
     }
@@ -420,6 +427,12 @@ public class FrontendCatalogService {
             return true;
         }
         return equalsNormalizedEmail(customerEmail, authenticatedClient.getEmail());
+    }
+
+    private boolean belongsToGuest(String linkedGuestExternalId, String authenticatedGuestExternalId) {
+        return authenticatedGuestExternalId != null
+                && !authenticatedGuestExternalId.isBlank()
+                && authenticatedGuestExternalId.equals(linkedGuestExternalId);
     }
 
     private String primaryText(org.example.salon_project.frontend.dto.LocalizedTextDto value) {

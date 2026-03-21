@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
+import org.example.salon_project.frontend.dto.GuestRequest;
 import org.example.salon_project.frontend.dto.LoginRequest;
 import org.example.salon_project.frontend.dto.RegisterRequest;
 import org.example.salon_project.frontend.security.FrontendSecurityConstants;
@@ -100,6 +101,16 @@ abstract class FrontendIntegrationTestSupport {
         MvcResult result = mockMvc.perform(post("/api/v1/frontend/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json(new LoginRequest(ADMIN_EMAIL, ADMIN_PASSWORD))))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return extractAuthCookie(result);
+    }
+
+    protected Cookie loginAsGuest() throws Exception {
+        MvcResult result = mockMvc.perform(post("/api/v1/frontend/auth/guest")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(new GuestRequest("UA"))))
                 .andExpect(status().isOk())
                 .andReturn();
 

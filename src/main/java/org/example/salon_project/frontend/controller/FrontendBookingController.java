@@ -7,6 +7,7 @@ import org.example.salon_project.frontend.dto.BookingSaveRequest;
 import org.example.salon_project.frontend.service.FrontendBookingService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,19 +34,30 @@ public class FrontendBookingController {
 
     @PostMapping
     public BookingRecordDto createBooking(@Valid @RequestBody BookingSaveRequest request, Authentication authentication) {
-        return bookingService.createBooking(request, authentication != null ? authentication.getName() : null);
+        return bookingService.createBooking(request,
+                authentication != null ? authentication.getName() : null,
+                hasRole(authentication, "ROLE_GUEST"));
     }
 
     @PutMapping("/{id}")
     public BookingRecordDto updateBooking(@PathVariable String id, @Valid @RequestBody BookingSaveRequest request, Authentication authentication) {
-        boolean admin = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
-        return bookingService.saveBooking(id, request, authentication != null ? authentication.getName() : null, admin);
+        boolean admin = hasRole(authentication, "ROLE_ADMIN");
+        boolean guest = hasRole(authentication, "ROLE_GUEST");
+        return bookingService.saveBooking(id, request, authentication != null ? authentication.getName() : null, admin, guest);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteBooking(@PathVariable String id) {
         bookingService.deleteBooking(id);
+    }
+
+    private boolean hasRole(Authentication authentication, String role) {
+        if (authentication == null) {
+            return false;
+        }
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role::equals);
     }
 }

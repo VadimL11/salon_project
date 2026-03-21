@@ -6,7 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -52,14 +51,7 @@ public class TokenAuthFilter extends OncePerRequestFilter {
         String id = tokenService.getId(jwt);
         RoleType userUpperBoundaryRole = tokenService.getType(jwt);
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (RoleType type : RoleType.values()) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + type.name()));
-
-            if (type.equals(userUpperBoundaryRole)) {
-                break;
-            }
-        }
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + userUpperBoundaryRole.name()));
 
         UserDetails userDetails = new User(id, jwt, authorities);
 

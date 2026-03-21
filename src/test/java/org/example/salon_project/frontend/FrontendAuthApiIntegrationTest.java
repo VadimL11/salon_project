@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class FrontendAuthApiIntegrationTest extends FrontendIntegrationTestSupport {
 
     private static final String FRONTEND_ORIGIN = "https://salon-frontend.up.railway.app";
+    private static final String EVIL_ORIGIN = "https://evil.example";
 
     @Test
     void sessionWithoutCookieIsUnauthenticatedAndMatchesFrontendShape() throws Exception {
@@ -137,6 +138,40 @@ class FrontendAuthApiIntegrationTest extends FrontendIntegrationTestSupport {
     }
 
     @Test
+    void guestLoginSetsCookieAndSession() throws Exception {
+        MvcResult guestResult = mockMvc.perform(post("/api/v1/frontend/auth/guest")
+                        .secure(true)
+                        .header(HttpHeaders.ORIGIN, FRONTEND_ORIGIN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(new GuestRequest("UA"))))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, FRONTEND_ORIGIN))
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"))
+                .andReturn();
+
+        JsonNode guestBody = readBody(guestResult);
+        assertExactFields(guestBody, "ok", "role");
+        assertThat(guestBody.get("ok").asBoolean()).isTrue();
+        assertThat(guestBody.get("role").asText()).isEqualTo("guest");
+        assertThat(guestResult.getResponse().getHeader(HttpHeaders.SET_COOKIE))
+                .contains("SALON_AUTH=")
+                .contains("SameSite=None")
+                .contains("Secure");
+
+        MvcResult sessionResult = mockMvc.perform(get("/api/v1/frontend/auth/session")
+                        .secure(true)
+                        .header(HttpHeaders.ORIGIN, FRONTEND_ORIGIN)
+                        .cookie(extractAuthCookie(guestResult)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        JsonNode sessionBody = readBody(sessionResult);
+        assertExactFields(sessionBody, "authenticated", "role");
+        assertThat(sessionBody.get("authenticated").asBoolean()).isTrue();
+        assertThat(sessionBody.get("role").asText()).isEqualTo("guest");
+    }
+
+    @Test
     void corsPreflightAllowsCredentialedFrontendRequests() throws Exception {
         mockMvc.perform(options("/api/v1/frontend/auth/login")
                         .header(HttpHeaders.ORIGIN, FRONTEND_ORIGIN)
@@ -148,7 +183,27 @@ class FrontendAuthApiIntegrationTest extends FrontendIntegrationTestSupport {
     }
 
     @Test
-    void loginGuestAndLogoutMatchFrontendContract() throws Exception {
+    void disallowedOriginsAreRejectedBeforeCookieAuthMutations() throws Exception {
+        JsonNode body = readBody(mockMvc.perform(post("/api/v1/frontend/auth/login")
+                        .header(HttpHeaders.ORIGIN, EVIL_ORIGIN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(new LoginRequest(ADMIN_EMAIL, ADMIN_PASSWORD))))
+                .andExpect(status().isForbidden())
+                .andReturn());
+
+        assertExactFields(body, "code", "message");
+        assertThat(body.get("code").asText()).isEqualTo("FORBIDDEN");
+        assertThat(body.get("message").asText()).isEqualTo("Origin not allowed");
+    }
+
+    @Test
+    void devTokenEndpointIsDisabledByDefault() throws Exception {
+        mockMvc.perform(get("/api/v1/auth/dev-token"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void loginAndLogoutMatchFrontendContract() throws Exception {
         MvcResult invalidLoginResult = mockMvc.perform(post("/api/v1/frontend/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json(new LoginRequest(ADMIN_EMAIL, "wrong-password"))))
@@ -160,20 +215,9 @@ class FrontendAuthApiIntegrationTest extends FrontendIntegrationTestSupport {
         assertThat(invalidLoginBody.get("ok").asBoolean()).isFalse();
         assertThat(invalidLoginBody.get("error").asText()).isEqualTo("invalid_credentials");
 
-        MvcResult guestResult = mockMvc.perform(post("/api/v1/frontend/auth/guest")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json(new GuestRequest("UA"))))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        JsonNode guestBody = readBody(guestResult);
-        assertExactFields(guestBody, "ok", "role");
-        assertThat(guestBody.get("ok").asBoolean()).isTrue();
-        assertThat(guestBody.get("role").asText()).isEqualTo("guest");
-        assertThat(guestResult.getResponse().getHeader(HttpHeaders.SET_COOKIE)).isNull();
-
         MvcResult loginResult = mockMvc.perform(post("/api/v1/frontend/auth/login")
                         .secure(true)
+                        .header(HttpHeaders.ORIGIN, FRONTEND_ORIGIN)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json(new LoginRequest(ADMIN_EMAIL, ADMIN_PASSWORD))))
                 .andExpect(status().isOk())
@@ -186,6 +230,7 @@ class FrontendAuthApiIntegrationTest extends FrontendIntegrationTestSupport {
 
         MvcResult logoutResult = mockMvc.perform(post("/api/v1/frontend/auth/logout")
                         .secure(true)
+                        .header(HttpHeaders.ORIGIN, FRONTEND_ORIGIN)
                         .cookie(extractAuthCookie(loginResult)))
                 .andExpect(status().isNoContent())
                 .andReturn();
